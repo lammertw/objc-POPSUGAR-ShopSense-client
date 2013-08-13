@@ -160,14 +160,31 @@ static dispatch_once_t once_token = 0;
 	return NO;
 }
 
++ (int)indexOfLocale:(NSLocale *)locale
+{
+    int index = NSNotFound;
+    for (int i = 0; i < [self supportedLocales].count; i++)
+    {
+        NSLocale *supportedLocale = [[self supportedLocales] objectAtIndex:i];
+        if ([supportedLocale.localeIdentifier isEqualToString:locale.localeIdentifier])
+        {
+            index = i;
+            break;
+        }
+    }
+    return index;
+}
+
 + (NSLocale *)supportedLocaleForLocale:(NSLocale *)locale
 {
 	if (locale == nil) {
 		return [self defaultLocale];
 	}
-	if ([self isSupportedLocale:locale]) {
-		return locale;
-	}
+    
+    int localeIndex = [self indexOfLocale:locale];
+    if (localeIndex != NSNotFound) {
+        return [[self supportedLocales] objectAtIndex:localeIndex];
+    }
 	
 	// we prefer the default locale if the language matches
 	NSString *language = [locale objectForKey:NSLocaleLanguageCode];
