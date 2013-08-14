@@ -48,6 +48,11 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 	return [[[self class] alloc] initWithType:type filterID:filterID];
 }
 
++ (instancetype)filterWithType:(NSString *)type fromFilterID:(NSNumber *)fromFilterID toFilterID:(NSNumber *)toFilterID
+{
+	return [[[self class] alloc] initWithType:type fromFilterID:fromFilterID toFilterID:toFilterID];
+}
+
 - (instancetype)initWithType:(NSString *)type filterID:(NSNumber *)filterID
 {
 	NSParameterAssert(filterID != nil);
