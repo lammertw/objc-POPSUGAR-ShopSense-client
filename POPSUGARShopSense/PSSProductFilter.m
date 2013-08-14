@@ -35,6 +35,7 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 
 @property (nonatomic, copy, readwrite) NSString *type;
 @property (nonatomic, copy, readwrite) NSNumber *filterID;
+@property (nonatomic, copy, readwrite) NSNumber *toFilterID;
 
 @end
 
@@ -60,11 +61,31 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 	return self;
 }
 
+- (instancetype)initWithType:(NSString *)type fromFilterID:(NSNumber *)fromFilterID toFilterID:(NSNumber *)toFilterID
+{
+	NSParameterAssert(fromFilterID != nil);
+	NSParameterAssert(toFilterID != nil);
+	NSParameterAssert(type != nil);
+	NSAssert([[self class] isValidRangeType:type], @"You must choose a type from the supplied constants.");
+	self = [super init];
+	if (self) {
+		_filterID = [fromFilterID copy];
+		_toFilterID = [toFilterID copy];
+		_type = [type copy];
+	}
+	return self;
+}
+
 #pragma mark - type
 
 + (BOOL)isValidType:(NSString *)type
 {
 	return ([type isEqualToString:PSSProductFilterTypeBrand] || [type isEqualToString:PSSProductFilterTypeRetailer] || [type isEqualToString:PSSProductFilterTypePrice] || [type isEqualToString:PSSProductFilterTypeDiscount] || [type isEqualToString:PSSProductFilterTypeSize] || [type isEqualToString:PSSProductFilterTypeColor]);
+}
+
++ (BOOL)isValidRangeType:(NSString *)type
+{
+	return ([type isEqualToString:PSSProductFilterTypePrice]);
 }
 
 - (void)setType:(NSString *)type
@@ -106,7 +127,11 @@ NSString * const PSSProductFilterTypeColor = @"Color";
 
 - (NSString *)queryParameterRepresentation
 {
-	return [[self typePrefixForQueryParameterRepresentation] stringByAppendingString: self.filterID.stringValue];
+    NSString *queryValue = self.filterID.stringValue;
+    if (self.toFilterID != nil) {
+        queryValue = [queryValue stringByAppendingFormat: @":%@", self.toFilterID];
+    }
+	return [[self typePrefixForQueryParameterRepresentation] stringByAppendingString: queryValue];
 }
 
 #pragma mark - NSObject

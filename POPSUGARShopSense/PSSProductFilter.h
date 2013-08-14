@@ -98,11 +98,21 @@ extern NSString * const PSSProductFilterTypeColor;
 /** Creating a `PSSProductFilter` requires a type and filterID. */
 - (instancetype)initWithType:(NSString *)type filterID:(NSNumber *)filterID;
 
+/** Creating a `PSSProductFilter` requires a type and range of filterID. */
+- (instancetype)initWithType:(NSString *)type fromFilterID:(NSNumber *)fromFilterID toFilterID:(NSNumber *)toFilterID;
+
 /** A convenience method as an alternative to alloc and `initWithType:filterID:`
  
  @see initWithType:filterID:
  */
 + (instancetype)filterWithType:(NSString *)type filterID:(NSNumber *)filterID;
+
+/** A convenience method as an alternative to alloc and `initWithType:fromFilterID:toFilterID`
+ 
+ @see initWithType:fromFilterID:toFilterID
+ */
++ (instancetype)filterWithType:(NSString *)type fromFilterID:(NSNumber *)fromFilterID toFilterID:(NSNumber *)toFilterID;
+;
 
 /**---------------------------------------------------------------------------------------
  * @name Converting to URL Parameters
